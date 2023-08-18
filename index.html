@@ -7,46 +7,30 @@
 <body>
   <h1>Razorpay Payment Integration</h1>
   
+  <!-- Input field for the Razorpay key -->
+  <label for="key">Enter Razorpay Key:</label>
+  <input type="text" id="key" placeholder="Enter Razorpay Key" />
+
   <label for="amount">Enter Amount Here:</label>
   <input type="text" id="amount" placeholder="Enter amount" />
+
+  <label for="orderId">Enter Order ID:</label>
+  <input type="text" id="orderId" placeholder="Enter order ID" />
+
   <button id="payButton">Pay</button>
 
   <script>
     document.getElementById('payButton').addEventListener('click', function() {
+      var key = document.getElementById('key').value; // Get the Razorpay key
       var amount = document.getElementById('amount').value;
+      var orderId = document.getElementById('orderId').value;
 
-      // Create an order on the server using Razorpay API
-      createOrder(amount);
+      initiatePayment(key, orderId, amount);
     });
 
-    function createOrder(amount) {
-      // Replace 'YOUR_KEY_ID' and 'YOUR_SECRET' with your actual Razorpay key and secret
-      var instance = new Razorpay({
-        key_id: 'rzp_test_S6BMgZrecM9Z27',
-        key_secret: 'E8Hi5kXR6tfEuabrEVvMlNjw'
-      });
-
-      instance.orders.create({
-        amount: amount * 100, // Amount in paise or smallest currency unit
-        currency: "INR",
-        receipt: "receipt#1",
-        notes: {
-          key1: "value3",
-          key2: "value2"
-        }
-      }, function(response) {
-        // Handle the response from the API call
-        if (response.id) {
-          initiatePayment(response.id, amount);
-        } else {
-          alert('Failed to create order.');
-        }
-      });
-    }
-
-    function initiatePayment(orderId, amount) {
+    function initiatePayment(key, orderId, amount) {
       var options = {
-        key: 'rzp_test_S6BMgZrecM9Z27',
+        key: key, // Use the provided Razorpay key
         amount: amount * 100,
         currency: 'INR',
         name: 'Sample Store',

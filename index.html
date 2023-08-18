@@ -1,106 +1,43 @@
+<!DOCTYPE html>
 <html>
 <head>
-<title>NSA</title>
-<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-<script type="text/javascript">
-   
-   function pay(orderId){
-       var str =document.getElementById("input").value;
-     if(str){
-    var options = {
-    "key": "rzp_test_S6BMgZrecM9Z27", 
-    "order_id": orderId,
-    "amount": str*100, 
-    "currency": "INR",
-    "name": "For Payment",
-    "description": "Test Transaction",
-    "image": "logo.jpg", 
-    "callback_url": "https://eneqd3r9zrjok.x.pipedream.net/",   
-    "handler": function (response){
-        alert(response.razorpay_payment_id);
-        alert(response.razorpay_order_id);
-        alert(response.razorpay_signature)
-    },
-    "prefill": {
-        "name": "Narendra Singh Aanjna Kumar",
-        "email": "narendraanjana09@gmail.com",
-        "contact": "8120985632"
-    },
-    "notes": {
-        "address": "Payment to NSA"
-    },
-    "theme": {
-        "color": "#3399cc"
-    }
-};
-var rzp1 = new Razorpay(options);
-rzp1.open();
-rzp1.on('payment.failed', function (response){
-        alert(response.error.description);
-});
-     }else{
-      alert("Please Enter Some Value!");
-     }
-        
-   }
-
-
-</script>
-
-<script>
-        
-        async function sendAPIRequest() {
-            var str =document.getElementById("input").value;
-
-            const url = 'https://api.razorpay.com/v1/orders';
-            const apiKey = 'rzp_test_S6BMgZrecM9Z27';
-            const apiSecret = 'E8Hi5kXR6tfEuabrEVvMlNjw';
-
-            const requestBody = {
-                amount: str*100,
-                currency: 'INR',
-                receipt: 'qwsaq1',
-                partial_payment: true,
-                first_payment_min_amount: 230
-            };
-
-            const headers = new Headers();
-            headers.append('Authorization', 'Basic ' + btoa(apiKey + ':' + apiSecret));
-            headers.append('Content-Type', 'application/json');
-
-            const options = {
-                method: 'POST',
-                headers: headers,
-                body: JSON.stringify(requestBody)
-            };
-
-            try {
-                const response = await fetch(url, options);
-                const data = await response.json();
-                console.log('Response:', data);
-
-                if (data && data.id) {
-                    const orderId = data.id;
-                    console.log('Order ID:', orderId);
-                    pay(orderId)
-                } else {
-                    console.error('Response does not contain order ID.');
-                }
-            } catch (error) {
-                console.error('Error:', error);
-            }
-        }
-    </script>
-
+  <title>Razorpay Payment Integration</title>
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 </head>
 <body>
+  <h1>Razorpay Payment Integration</h1>
+  
+  <label for="amount">Enter Amount:</label>
+  <input type="text" id="amount" placeholder="Enter amount" />
+  <label for="amount">Enter OrderID:</label>
+  <input type="text" id="order_id" placeholder="Enter order id" />
+  <button id="payButton">Pay</button>
 
-    
+  <script>
+    document.getElementById('payButton').addEventListener('click', function() {
+      var amount = document.getElementById('amount').value;
+       var orderId = document.getElementById('order_id').value;
+       
+      var options = {
+        key: 'rzp_test_S6BMgZrecM9Z27',
+        amount: amount * 100, // Amount in paise or smallest currency unit
+        currency: 'INR',
+        name: 'Sample Store',
+        description: 'Test Payment',
+        order_id: orderId,
+        handler: function(response) {
+          // This function will be called after successful payment
+          alert('Payment successful! Payment ID: ' + response.razorpay_payment_id);
+        },
+        prefill: {
+          name: 'Narendra Singh Aanjna',
+          email: 'narendraanjana09@gmail.com'
+        }
+      };
 
-    <input id="input" placeholder="Enter Amount">
-    <br>
-    <br><br> 
-    <button onclick="sendAPIRequest()" id="sendRequest">Send Request</button>
+      var rzp = new Razorpay(options);
+      rzp.open();
+    });
+  </script>
 </body>
-
 </html>

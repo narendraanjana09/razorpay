@@ -52,13 +52,14 @@
         name: 'Sample Store',
         description: 'Test Payment',
         order_id: orderId,
+        image: "logo.jpg", 
         handler: function(response) {
           // This function will be called after successful payment
           alert('Payment successful! Payment ID: ' + response.razorpay_payment_id);
         },
         prefill: {
-          name: 'John Doe',
-          email: 'johndoe@example.com'
+          name: 'Narendra Singh Anjana',
+          email: 'narendraanjana09@gmail.com'
         }
       };
 
